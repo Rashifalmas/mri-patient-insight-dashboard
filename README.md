@@ -144,6 +144,13 @@ mri-patient-insight-dashboard/
 ```
 ---
 Local Setup
+The application is intended to run locally for the current project submission.
+The reviewer needs:
+The GitHub repository
+The `.env` file provided separately
+The exported Langflow flow JSON provided separately
+The Supabase project is already configured in the provided `.env` file, so a new Supabase project does not need to be created.
+---
 1. Clone the repository
 ```bash
 git clone <repository-url>
@@ -153,32 +160,70 @@ cd mri-patient-insight-dashboard
 ```bash
 npm install
 ```
-3. Create the environment file
-Create a `.env` file in the project root based on `.env.example`.
+3. Add the provided `.env`
+Download the `.env` file from the private Google Drive submission materials and place it in the project root:
+```text
+mri-patient-insight-dashboard/
+├── .env
+├── .env.example
+├── package.json
+├── src/
+└── ...
+```
+The provided `.env` contains the Supabase configuration and the Langflow configuration fields.
 Example structure:
 ```env
-VITE_SUPABASE_URL=
-VITE_SUPABASE_ANON_KEY=
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
 
-LANGFLOW_API_URL=
-LANGFLOW_API_KEY=
-LANGFLOW_FLOW_ID=
+LANGFLOW_API_URL=http://localhost:7860
+LANGFLOW_API_KEY=...
+LANGFLOW_FLOW_ID=...
 
 API_PORT=3001
 ```
-Do not commit `.env` to Git.
+Do not commit the `.env` file to Git.
+---
+Langflow Setup
+The AI Insight feature requires a local Langflow instance.
+1. Install and start Langflow
+Start Langflow locally and make sure it is available at:
+```text
+http://localhost:7860
+```
+2. Import the provided Langflow flow
+From the private Google Drive submission materials, download the exported flow JSON file.
+In Langflow:
+Open the Langflow interface.
+Import the provided flow JSON.
+Open the imported MRI analytics flow.
+Verify that the Google Generative AI component is configured.
+The exported flow includes the Google Gemini API key used for the project demonstration.
+> The flow export is provided privately for project evaluation. Do not publish or redistribute the exported flow or its embedded credentials.
+3. Create a Langflow API key
+The Langflow API key belongs to the local Langflow instance, so the reviewer should create their own API key in their own Langflow environment.
+After creating the key, update:
+```env
+LANGFLOW_API_KEY=YOUR_LOCAL_LANGFLOW_API_KEY
+```
+4. Get the imported Flow ID
+After importing the flow, copy the Flow ID shown by the local Langflow instance and update:
+```env
+LANGFLOW_FLOW_ID=YOUR_IMPORTED_FLOW_ID
+```
+The reviewer does not need to create the flow manually. The provided JSON flow should be imported instead.
 ---
 Running the Application Locally
-The application uses three components during local development:
+The application uses three components:
 Langflow
 Backend API
 React frontend
 1. Start Langflow
-Start the local Langflow instance and make sure it is available at:
+Make sure Langflow is running:
 ```text
 http://localhost:7860
 ```
-The MRI analytics flow should be available in the Langflow instance.
+The imported MRI analytics flow must be available.
 2. Start the backend
 Open a terminal in the project root:
 ```powershell
@@ -231,21 +276,22 @@ Environment Variables
 Variable	Purpose
 `VITE_SUPABASE_URL`	Supabase project URL
 `VITE_SUPABASE_ANON_KEY`	Supabase public/anonymous key
-`LANGFLOW_API_URL`	Langflow API base URL
-`LANGFLOW_API_KEY`	Langflow API authentication key
-`LANGFLOW_FLOW_ID`	Langflow flow identifier
+`LANGFLOW_API_URL`	Local Langflow API base URL
+`LANGFLOW_API_KEY`	API key created for the reviewer's local Langflow instance
+`LANGFLOW_FLOW_ID`	Flow ID generated after importing the provided Langflow flow
 `API_PORT`	Local backend port
-Sensitive values are intentionally excluded from this repository.
 ---
 Security Note
 The `.env` file is excluded from Git using `.gitignore`.
-API keys and private credentials should not be committed to the repository.
-For demonstration purposes, the required `.env` file is provided separately to the authorized reviewer.
+The GitHub repository does not contain the actual `.env` file or its credentials.
+For this private project evaluation, the configured `.env` file and exported Langflow flow are provided separately to the authorized reviewer.
+Because the exported Langflow flow contains project credentials for demonstration purposes, the flow file should not be publicly redistributed.
+After the evaluation period, the project owner may revoke or rotate the associated Google Gemini API key.
 ---
 Deployment
-The repository includes configuration for Vercel deployment.
+The repository includes configuration prepared for Vercel deployment.
 The current submission uses a local Langflow instance for demonstration.
-For a full public deployment, Langflow must be hosted on a publicly accessible server and `LANGFLOW_API_URL` must point to that public Langflow instance.
+A full public deployment would require hosting Langflow on a publicly accessible server and updating `LANGFLOW_API_URL` accordingly.
 ---
 Recommended Demo Flow
 ```text
